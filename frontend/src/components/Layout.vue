@@ -226,7 +226,7 @@ const routes = computed(() => {
     height: 40px;
     background: $bg-input;
     border: none;
-    border-radius: $radius-full;
+    border-radius: 24px;
     padding: 0 $spacing-lg 0 40px;
     font-size: 14px;
     color: $text-primary;
