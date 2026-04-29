@@ -26,10 +26,10 @@
       </el-menu>
 
       <div class="sidebar-footer">
-        <el-menu-item index="/settings" class="settings-item">
+        <div class="settings-item" @click="$router.push('/settings')">
           <el-icon><Setting /></el-icon>
           <span>设置</span>
-        </el-menu-item>
+        </div>
       </div>
     </el-aside>
 
@@ -185,10 +185,19 @@ const routes = computed(() => {
     margin: 0 $spacing-lg;
     border-radius: $radius-md;
     color: $text-secondary;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: $spacing-md;
 
     &:hover {
       background: $bg-hover;
       color: $text-primary;
+    }
+
+    .el-icon {
+      font-size: 18px;
     }
   }
 }
