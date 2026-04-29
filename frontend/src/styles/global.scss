@@ -1,0 +1,166 @@
+@use 'variables' as *;
+
+// 页面标题
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xl;
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0;
+
+    .subtitle {
+      font-size: 14px;
+      color: $text-secondary;
+      font-weight: 400;
+      margin-left: $spacing-md;
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: $spacing-md;
+  }
+}
+
+// 统计卡片
+.stat-card {
+  background: $bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  border: 1px solid $border;
+  box-shadow: $shadow-sm;
+
+  .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: $text-primary;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: $text-secondary;
+    margin-top: $spacing-sm;
+  }
+}
+
+// 搜索框样式
+.search-input {
+  :deep(.el-input__wrapper) {
+    background: $bg-input;
+    border-radius: $radius-full;
+    box-shadow: none;
+    padding: 0 $spacing-lg;
+
+    .el-input__inner {
+      height: 40px;
+    }
+  }
+}
+
+// 学科标签
+.subject-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: $radius-sm;
+  font-size: 12px;
+  font-weight: 500;
+  margin-right: $spacing-xs;
+
+  &.chinese {
+    background: $subject-chinese-bg;
+    color: $subject-chinese-text;
+  }
+
+  &.math {
+    background: $subject-math-bg;
+    color: $subject-math-text;
+  }
+
+  &.english {
+    background: $subject-english-bg;
+    color: $subject-english-text;
+  }
+
+  &.physics {
+    background: $subject-physics-bg;
+    color: $subject-physics-text;
+  }
+
+  &.chemistry {
+    background: $subject-chemistry-bg;
+    color: $subject-chemistry-text;
+  }
+}
+
+// 性别标签
+.gender-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: $radius-sm;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.male {
+    background: $info-light;
+    color: $info-text;
+  }
+
+  &.female {
+    background: $pink-light;
+    color: $pink-text;
+  }
+}
+
+// 状态标签
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: $radius-sm;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.success {
+    background: $success-light;
+    color: $success-text;
+  }
+
+  &.warning {
+    background: $warning-light;
+    color: $warning-text;
+  }
+
+  &.danger {
+    background: $danger-light;
+    color: $danger-text;
+  }
+}
+
+// 记录卡片
+.record-card {
+  background: $bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 1px solid $border;
+  margin-bottom: $spacing-lg;
+}
+
+// 快捷标签
+.quick-tag {
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: $primary !important;
+    color: white !important;
+    border-color: $primary !important;
+  }
+}

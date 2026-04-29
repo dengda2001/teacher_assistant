@@ -1,0 +1,313 @@
+@use './variables.scss' as *;
+
+// Element Plus 主题覆盖 - shadcn/ui 中性风格
+
+// 按钮 - shadcn 风格
+.el-button {
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 14px;
+  height: 36px;
+  padding: 0 16px;
+  transition: all $transition-fast $ease-out;
+
+  &--primary {
+    background: var(--primary);
+    border: 1px solid var(--primary);
+    color: var(--primary-foreground);
+
+    &:hover {
+      background: rgba(10, 10, 10, 0.9);
+      border-color: rgba(10, 10, 10, 0.9);
+    }
+  }
+
+  &--default {
+    background: var(--background);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+
+    &:hover {
+      background: var(--secondary);
+      border-color: var(--border);
+    }
+  }
+
+  &--success {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: white;
+  }
+
+  &--danger {
+    background: var(--destructive);
+    border-color: var(--destructive);
+    color: var(--destructive-foreground);
+  }
+
+  &--text {
+    color: var(--muted-foreground);
+
+    &:hover {
+      color: var(--foreground);
+      background: var(--muted);
+    }
+  }
+}
+
+// 卡片 - shadcn 风格
+.el-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  background: var(--card);
+
+  .el-card__header {
+    border-bottom: 1px solid var(--border);
+    padding: 24px;
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .el-card__body {
+    padding: 24px;
+  }
+}
+
+// 表格 - shadcn 风格
+.el-table {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+
+  th.el-table__cell {
+    background: var(--muted);
+    font-weight: 500;
+    color: var(--foreground);
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+
+  td.el-table__cell {
+    color: var(--muted-foreground);
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+
+  .el-table__row:hover > td {
+    background: var(--muted);
+  }
+}
+
+// 输入框 - shadcn 风格
+.el-input {
+  .el-input__wrapper {
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 0 1px var(--border) inset;
+    background: var(--background);
+    padding: 0 12px;
+
+    &:focus-within {
+      box-shadow: 0 0 0 2px var(--ring) inset;
+    }
+  }
+
+  .el-input__inner {
+    height: 36px;
+    font-size: 14px;
+  }
+}
+
+// 选择器
+.el-select {
+  .el-input__wrapper {
+    border-radius: var(--radius-md);
+  }
+}
+
+// 菜单 - shadcn 风格
+.el-menu {
+  border-right: none;
+  background: transparent;
+
+  .el-menu-item {
+    border-radius: var(--radius-md);
+    margin: 2px 8px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    color: var(--muted-foreground);
+
+    &:hover {
+      background: var(--muted);
+      color: var(--foreground);
+    }
+
+    &.is-active {
+      background: var(--secondary);
+      color: var(--foreground);
+      font-weight: 500;
+    }
+
+    .el-icon {
+      margin-right: 12px;
+      font-size: 16px;
+    }
+  }
+}
+
+// 标签 - shadcn 风格
+.el-tag {
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 12px;
+  padding: 0 10px;
+  height: 24px;
+  line-height: 22px;
+
+  &--primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  &--success {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #166534;
+  }
+
+  &--warning {
+    background: #fef9c3;
+    border-color: #fde047;
+    color: #854d0e;
+  }
+
+  &--danger {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #991b1b;
+  }
+
+  &--info {
+    background: var(--secondary);
+    border-color: var(--border);
+    color: var(--muted-foreground);
+  }
+}
+
+// 弹窗 - shadcn 风格
+.el-dialog {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-modal);
+  border: 1px solid var(--border);
+
+  .el-dialog__header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+    margin-right: 0;
+
+    .el-dialog__title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+
+  .el-dialog__body {
+    padding: 24px;
+  }
+
+  .el-dialog__footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+  }
+}
+
+// 分页 - shadcn 风格
+.el-pagination {
+  .el-pagination__total {
+    color: var(--muted-foreground);
+    font-size: 14px;
+  }
+
+  .el-pager li {
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    min-width: 32px;
+    height: 32px;
+    line-height: 32px;
+
+    &.active {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    &:hover {
+      background: var(--muted);
+    }
+  }
+
+  .btn-prev,
+  .btn-next {
+    border-radius: var(--radius-sm);
+    min-width: 32px;
+    height: 32px;
+  }
+}
+
+// Radio Button Group - shadcn 风格
+.el-radio-group {
+  .el-radio-button__inner {
+    font-weight: 500;
+    font-size: 14px;
+  }
+}
+
+// Checkbox - shadcn 风格
+.el-checkbox {
+  .el-checkbox__label {
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
+// Alert - shadcn 风格
+.el-alert {
+  border-radius: var(--radius-md);
+  border: 1px solid;
+
+  &--info {
+    background: #f0f9ff;
+    border-color: #bae6fd;
+    color: #0369a1;
+  }
+
+  &--success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #15803d;
+  }
+
+  &--warning {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #b45309;
+  }
+
+  &--error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #b91c1c;
+  }
+}
+
+// Timeline - shadcn 风格
+.el-timeline {
+  .el-timeline-item__node {
+    background: var(--muted-foreground);
+  }
+
+  .el-timeline-item__content {
+    font-size: 14px;
+  }
+}
