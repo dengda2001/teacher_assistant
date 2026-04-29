@@ -575,7 +575,7 @@ const saveSettings = () => {
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: $bg-secondary;
+      background-color: $bg-hover;
     }
   }
 
