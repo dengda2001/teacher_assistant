@@ -1,0 +1,161 @@
+/* 教师助手设计系统 - CSS 变量 */
+
+:root {
+  /* 基础色板 */
+  --color-bg-primary: #FDF8F3;
+  --color-bg-secondary: #F8F0E8;
+  --color-bg-card: rgba(255, 253, 250, 0.7);
+
+  /* 强调色 */
+  --color-primary: #C4A882;
+  --color-secondary: #A8B89C;
+  --color-accent-coral: #E8A598;
+
+  /* 数据卡片配色 */
+  --color-student: #E8C4A8;
+  --color-record: #C5D4B8;
+  --color-comment: #F0D5C5;
+  --color-score: #E8D0E0;
+
+  /* 文字色 */
+  --color-text-primary: #2C2C2C;
+  --color-text-secondary: #6B5B4F;
+  --color-text-muted: #9B8B7B;
+
+  /* 玻璃态 */
+  --glass-bg: rgba(255, 253, 250, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-blur: blur(20px) saturate(180%);
+
+  /* 圆角 */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+
+  /* 间距 */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+
+  /* 阴影 */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1);
+  --shadow-button: 0 4px 16px rgba(196, 168, 130, 0.35);
+
+  /* 字体 */
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* 过渡 */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 布局 */
+  --sidebar-width: 240px;
+  --main-padding: 32px;
+}
+
+/* 基础样式 */
+body {
+  font-family: var(--font-body);
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+/* 玻璃态卡片 */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+}
+
+/* 主按钮 */
+.btn-primary {
+  padding: 12px 24px;
+  border-radius: var(--radius-lg);
+  border: none;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow-button);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+}
+
+/* 数据卡片 */
+.stat-card {
+  padding: 20px 16px;
+  border-radius: var(--radius-xl);
+  text-align: center;
+  transition: transform var(--transition-slow), box-shadow var(--transition-slow);
+  cursor: pointer;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 导航项 */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.nav-item.active {
+  background: rgba(196, 168, 130, 0.2);
+}
+
+/* 标签 */
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  background: rgba(196, 168, 130, 0.15);
+  border-radius: 10px;
+  color: var(--color-text-secondary);
+}
+
+/* 头像 */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-student) 0%, var(--color-record) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+}
+
+/* 时间线 */
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(196, 168, 130, 0.2);
+}

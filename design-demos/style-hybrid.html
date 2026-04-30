@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教师助手 - 融合设计</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #FAF8F5 0%, #F5F0EB 100%);
+      color: #2C2C2C;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    :root {
+      --bg-primary: #FAF8F5;
+      --bg-sidebar: rgba(255, 255, 255, 0.7);
+      --glass-bg: rgba(255, 255, 255, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.5);
+      --text-primary: #2C2C2C;
+      --text-secondary: #6B6B6B;
+      --text-muted: #9B9B9B;
+      --accent-terracotta: #C4A484;
+      --accent-sage: #A8B5A0;
+      --accent-clay: #D4C5B9;
+      --accent-coral: #E8A598;
+      --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Hybrid: Kinfolk + Notion + Apple Glass
+    function Dashboard() {
+      const [greeting, setGreeting] = useState('');
+      const [currentDate, setCurrentDate] = useState('');
+      const [hoveredCard, setHoveredCard] = useState(null);
+      const [expandedBlocks, setExpandedBlocks] = useState({ stats: true, actions: true, activity: true });
+
+      useEffect(() => {
+        const hour = new Date().getHours();
+        setGreeting(hour < 12 ? '早上好' : hour < 18 ? '下午好' : '晚上好');
+        const date = new Date();
+        const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        setCurrentDate(`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${weekdays[date.getDay()]}`);
+      }, []);
+
+      const toggleBlock = (key) => {
+        setExpandedBlocks(prev => ({ ...prev, [key]: !prev[key] }));
+      };
+
+      const stats = [
+        { label: '学生', value: '48', desc: '位小可爱', icon: '👨‍🎓', color: '#E8D5C4' },
+        { label: '记录', value: '156', desc: '条表现', icon: '✨', color: '#D4E4D1' },
+        { label: '待评', value: '12', desc: '份评语', icon: '📝', color: '#F5E6DC' },
+        { label: '均分', value: '82.5', desc: '班级平均', icon: '📊', color: '#E8D8E8' }
+      ];
+
+      const quickActions = [
+        { label: '学生管理', icon: '👥', color: '#A8B5A0', desc: '查看和管理学生信息' },
+        { label: '添加记录', icon: '✏️', color: '#C4A484', desc: '记录课堂表现' },
+        { label: '生成评语', icon: '💬', color: '#E8A598', desc: 'AI辅助生成评语' },
+        { label: '成绩管理', icon: '📈', color: '#9BB5CE', desc: '导入和分析成绩' }
+      ];
+
+      const activities = [
+        { emoji: '✅', title: '导入期中成绩', desc: '数学、语文、英语三科', time: '2小时前', tag: '成绩' },
+        { emoji: '💬', title: '生成学生评语', desc: '为15名学生生成评语', time: '5小时前', tag: '评语' },
+        { emoji: '⭐', title: '添加表现记录', desc: '张小明同学的课堂表现', time: '1天前', tag: '记录' }
+      ];
+
+      const todos = [
+        { text: '为张小明生成本学期评语', checked: false },
+        { text: '导入本周数学测验成绩', checked: true },
+        { text: '更新家长会材料', checked: false }
+      ];
+
+      return (
+        <div style={styles.container}>
+          {/* Ambient Background Orbs */}
+          <div style={styles.orb1}></div>
+          <div style={styles.orb2}></div>
+          <div style={styles.orb3}></div>
+
+          {/* Glass Sidebar */}
+          <aside style={styles.sidebar}>
+            <div style={styles.sidebarHeader}>
+              <div style={styles.logoIcon}>🌿</div>
+              <div>
+                <div style={styles.logoTitle}>教师助手</div>
+                <div style={styles.logoSubtitle}>自然 · 从容</div>
+              </div>
+            </div>
+
+            <nav style={styles.nav}>
+              <div style={{...styles.navItem, background: 'rgba(196, 164, 132, 0.15)'}}>
+                <span style={styles.navIcon}>🏠</span>
+                <span>首页概览</span>
+              </div>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>👤</span>
+                <span>学生管理</span>
+              </div>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>📝</span>
+                <span>评语生成</span>
+              </div>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>📊</span>
+                <span>成绩分析</span>
+              </div>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>⭐</span>
+                <span>表现记录</span>
+              </div>
+            </nav>
+
+            <div style={styles.sidebarFooter}>
+              <div style={styles.userCard}>
+                <div style={styles.userAvatar}>张</div>
+                <div>
+                  <div style={styles.userName}>张老师</div>
+                  <div style={styles.userRole}>高三(1)班班主任</div>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <main style={styles.main}>
+            {/* Glass Header */}
+            <header style={styles.header}>
+              <div>
+                <h1 style={styles.pageTitle}>
+                  <span style={styles.greeting}>{greeting}</span>，
+                  <span style={styles.name}>张老师</span>
+                </h1>
+                <p style={styles.pageDate}>{currentDate}</p>
+              </div>
+              <div style={styles.headerActions}>
+                <button style={styles.glassButton}>🔔</button>
+                <button style={styles.primaryButton}>+ 新建</button>
+              </div>
+            </header>
+
+            {/* Todo Callout */}
+            <div style={styles.callout}>
+              <span style={styles.calloutIcon}>🌸</span>
+              <div style={styles.calloutText}>
+                今日有 <strong>3 项待办事项</strong> 需要处理，包括 2 份待生成评语和 1 个成绩导入任务
+              </div>
+            </div>
+
+            {/* Two Column Layout */}
+            <div style={styles.twoColumn}>
+              {/* Left Column */}
+              <div style={styles.column}>
+                {/* Stats Block - Collapsible */}
+                <div style={styles.glassBlock}>
+                  <div style={styles.blockHeader} onClick={() => toggleBlock('stats')}>
+                    <div style={styles.blockTitleRow}>
+                      <span style={styles.toggle}>{expandedBlocks.stats ? '▼' : '▶'}</span>
+                      <h2 style={styles.blockTitle}>📊 数据概览</h2>
+                    </div>
+                  </div>
+                  {expandedBlocks.stats && (
+                    <div style={styles.statsGrid}>
+                      {stats.map((stat, i) => (
+                        <div
+                          key={i}
+                          style={{
+                            ...styles.statCard,
+                            backgroundColor: stat.color,
+                            transform: hoveredCard === i ? 'translateY(-4px)' : 'translateY(0)',
+                            boxShadow: hoveredCard === i ? 'var(--shadow-hover)' : 'var(--shadow-soft)'
+                          }}
+                          onMouseEnter={() => setHoveredCard(i)}
+                          onMouseLeave={() => setHoveredCard(null)}
+                        >
+                          <div style={styles.statIcon}>{stat.icon}</div>
+                          <div style={styles.statValue}>{stat.value}</div>
+                          <div style={styles.statLabel}>{stat.label}</div>
+                          <div style={styles.statDesc}>{stat.desc}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Quick Actions Block */}
+                <div style={styles.glassBlock}>
+                  <div style={styles.blockHeader} onClick={() => toggleBlock('actions')}>
+                    <div style={styles.blockTitleRow}>
+                      <span style={styles.toggle}>{expandedBlocks.actions ? '▼' : '▶'}</span>
+                      <h2 style={styles.blockTitle}>🔗 快捷入口</h2>
+                    </div>
+                  </div>
+                  {expandedBlocks.actions && (
+                    <div style={styles.actionsGrid}>
+                      {quickActions.map((action, i) => (
+                        <button key={i} style={{...styles.actionCard, borderColor: action.color}}>
+                          <span style={styles.actionIcon}>{action.icon}</span>
+                          <span style={styles.actionLabel}>{action.label}</span>
+                          <span style={styles.actionDesc}>{action.desc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Right Column */}
+              <div style={styles.column}>
+                {/* Todo Block */}
+                <div style={styles.glassBlock}>
+                  <div style={styles.blockHeader}>
+                    <div style={styles.blockTitleRow}>
+                      <h2 style={styles.blockTitle}>✅ 今日待办</h2>
+                    </div>
+                  </div>
+                  <div style={styles.todoList}>
+                    {todos.map((todo, i) => (
+                      <div key={i} style={styles.todoItem}>
+                        <div style={{
+                          ...styles.checkbox,
+                          backgroundColor: todo.checked ? '#A8B5A0' : 'transparent',
+                          borderColor: todo.checked ? '#A8B5A0' : '#D4C5B9'
+                        }}>
+                          {todo.checked && <span style={styles.checkmark}>✓</span>}
+                        </div>
+                        <span style={{
+                          ...styles.todoText,
+                          textDecoration: todo.checked ? 'line-through' : 'none',
+                          color: todo.checked ? '#9B9B9B' : '#2C2C2C'
+                        }}>{todo.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Activity Block */}
+                <div style={styles.glassBlock}>
+                  <div style={styles.blockHeader} onClick={() => toggleBlock('activity')}>
+                    <div style={styles.blockTitleRow}>
+                      <span style={styles.toggle}>{expandedBlocks.activity ? '▼' : '▶'}</span>
+                      <h2 style={styles.blockTitle}>🕐 最近动态</h2>
+                    </div>
+                  </div>
+                  {expandedBlocks.activity && (
+                    <div style={styles.activityList}>
+                      {activities.map((activity, i) => (
+                        <div key={i} style={styles.activityItem}>
+                          <div style={styles.activityLine}>
+                            <div style={styles.activityDot}></div>
+                            {i < activities.length - 1 && <div style={styles.activityConnector}></div>}
+                          </div>
+                          <div style={styles.activityContent}>
+                            <div style={styles.activityHeader}>
+                              <span style={styles.activityEmoji}>{activity.emoji}</span>
+                              <span style={styles.activityTitle}>{activity.title}</span>
+                              <span style={styles.activityTag}>{activity.tag}</span>
+                            </div>
+                            <div style={styles.activityDesc}>{activity.desc}</div>
+                            <div style={styles.activityTime}>{activity.time}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Quote Block */}
+                <div style={styles.quoteBlock}>
+                  <div style={styles.quoteLine}></div>
+                  <p style={styles.quoteText}>"用温柔的方式，记录每一份成长。" 🌱</p>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    const styles = {
+      container: {
+        display: 'flex',
+        minHeight: '100vh',
+        position: 'relative',
+        overflow: 'hidden'
+      },
+      orb1: {
+        position: 'fixed',
+        width: '600px',
+        height: '600px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(196, 164, 132, 0.2) 0%, transparent 70%)',
+        top: '-200px',
+        right: '-200px',
+        pointerEvents: 'none',
+        filter: 'blur(80px)'
+      },
+      orb2: {
+        position: 'fixed',
+        width: '500px',
+        height: '500px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(168, 181, 160, 0.15) 0%, transparent 70%)',
+        bottom: '-100px',
+        left: '200px',
+        pointerEvents: 'none',
+        filter: 'blur(80px)'
+      },
+      orb3: {
+        position: 'fixed',
+        width: '400px',
+        height: '400px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(232, 165, 152, 0.12) 0%, transparent 70%)',
+        top: '40%',
+        right: '10%',
+        pointerEvents: 'none',
+        filter: 'blur(60px)'
+      },
+      sidebar: {
+        width: '260px',
+        background: 'rgba(255, 255, 255, 0.7)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        borderRight: '1px solid rgba(255, 255, 255, 0.5)',
+        padding: '24px 16px',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'fixed',
+        height: '100vh',
+        zIndex: 10
+      },
+      sidebarHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '8px 8px 20px',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+        marginBottom: '16px'
+      },
+      logoIcon: {
+        width: '40px',
+        height: '40px',
+        borderRadius: '12px',
+        background: 'linear-gradient(135deg, #A8B5A0 0%, #C4A484 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '20px'
+      },
+      logoTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '18px',
+        fontWeight: 600,
+        color: '#2C2C2C',
+        letterSpacing: '-0.3px'
+      },
+      logoSubtitle: {
+        fontSize: '12px',
+        color: '#9B9B9B'
+      },
+      nav: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px',
+        flex: 1
+      },
+      navItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '10px 14px',
+        borderRadius: '12px',
+        fontSize: '14px',
+        color: '#2C2C2C',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease'
+      },
+      navIcon: {
+        fontSize: '18px'
+      },
+      sidebarFooter: {
+        marginTop: 'auto',
+        paddingTop: '16px',
+        borderTop: '1px solid rgba(0, 0, 0, 0.06)'
+      },
+      userCard: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '12px',
+        background: 'rgba(255, 255, 255, 0.5)',
+        borderRadius: '16px',
+        border: '1px solid rgba(255, 255, 255, 0.5)'
+      },
+      userAvatar: {
+        width: '40px',
+        height: '40px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #C4A484 0%, #A8B5A0 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        fontSize: '16px',
+        fontWeight: 600
+      },
+      userName: {
+        fontSize: '14px',
+        fontWeight: 600,
+        color: '#2C2C2C'
+      },
+      userRole: {
+        fontSize: '12px',
+        color: '#9B9B9B'
+      },
+      main: {
+        flex: 1,
+        marginLeft: '260px',
+        padding: '32px 40px',
+        maxWidth: '1000px'
+      },
+      header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: '24px'
+      },
+      pageTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '32px',
+        fontWeight: 400,
+        color: '#2C2C2C',
+        marginBottom: '8px',
+        lineHeight: 1.3
+      },
+      greeting: {
+        fontStyle: 'italic'
+      },
+      name: {
+        fontWeight: 600
+      },
+      pageDate: {
+        fontSize: '14px',
+        color: '#9B9B9B'
+      },
+      headerActions: {
+        display: 'flex',
+        gap: '12px'
+      },
+      glassButton: {
+        width: '44px',
+        height: '44px',
+        borderRadius: '14px',
+        border: '1px solid rgba(255, 255, 255, 0.5)',
+        background: 'rgba(255, 255, 255, 0.6)',
+        backdropFilter: 'blur(10px)',
+        fontSize: '20px',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease'
+      },
+      primaryButton: {
+        padding: '12px 24px',
+        borderRadius: '14px',
+        border: 'none',
+        background: 'linear-gradient(135deg, #C4A484 0%, #A8B5A0 100%)',
+        color: 'white',
+        fontSize: '14px',
+        fontWeight: 600,
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        boxShadow: '0 4px 12px rgba(196, 164, 132, 0.3)'
+      },
+      callout: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '14px',
+        padding: '16px 20px',
+        background: 'rgba(255, 255, 255, 0.6)',
+        backdropFilter: 'blur(10px)',
+        borderRadius: '16px',
+        border: '1px solid rgba(255, 255, 255, 0.5)',
+        marginBottom: '24px',
+        boxShadow: 'var(--shadow-soft)'
+      },
+      calloutIcon: {
+        fontSize: '24px'
+      },
+      calloutText: {
+        fontSize: '14px',
+        color: '#6B6B6B'
+      },
+      twoColumn: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '20px'
+      },
+      column: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px'
+      },
+      glassBlock: {
+        background: 'rgba(255, 255, 255, 0.65)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        borderRadius: '20px',
+        border: '1px solid rgba(255, 255, 255, 0.5)',
+        padding: '20px',
+        boxShadow: 'var(--shadow-soft)'
+      },
+      blockHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '16px',
+        cursor: 'pointer'
+      },
+      blockTitleRow: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px'
+      },
+      toggle: {
+        fontSize: '10px',
+        color: '#9B9B9B',
+        transition: 'transform 0.2s ease'
+      },
+      blockTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '16px',
+        fontWeight: 500,
+        color: '#2C2C2C'
+      },
+      statsGrid: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '12px'
+      },
+      statCard: {
+        padding: '20px 16px',
+        borderRadius: '16px',
+        textAlign: 'center',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        cursor: 'pointer'
+      },
+      statIcon: {
+        fontSize: '28px',
+        marginBottom: '10px'
+      },
+      statValue: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '32px',
+        fontWeight: 600,
+        color: '#2C2C2C',
+        marginBottom: '4px'
+      },
+      statLabel: {
+        fontSize: '14px',
+        color: '#6B6B6B',
+        marginBottom: '2px'
+      },
+      statDesc: {
+        fontSize: '12px',
+        color: '#9B9B9B'
+      },
+      actionsGrid: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '10px'
+      },
+      actionCard: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '20px 12px',
+        borderRadius: '16px',
+        border: '2px solid transparent',
+        background: 'rgba(255, 255, 255, 0.4)',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease'
+      },
+      actionIcon: {
+        fontSize: '28px'
+      },
+      actionLabel: {
+        fontSize: '14px',
+        fontWeight: 500,
+        color: '#2C2C2C'
+      },
+      actionDesc: {
+        fontSize: '11px',
+        color: '#9B9B9B',
+        textAlign: 'center'
+      },
+      todoList: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px'
+      },
+      todoItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '10px',
+        background: 'rgba(255, 255, 255, 0.4)',
+        borderRadius: '12px'
+      },
+      checkbox: {
+        width: '20px',
+        height: '20px',
+        border: '2px solid #D4C5B9',
+        borderRadius: '6px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        flexShrink: 0
+      },
+      checkmark: {
+        color: 'white',
+        fontSize: '12px',
+        fontWeight: 700
+      },
+      todoText: {
+        fontSize: '14px',
+        flex: 1
+      },
+      activityList: {
+        display: 'flex',
+        flexDirection: 'column'
+      },
+      activityItem: {
+        display: 'flex',
+        gap: '12px',
+        padding: '12px 0',
+        position: 'relative'
+      },
+      activityLine: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        position: 'relative',
+        width: '20px'
+      },
+      activityDot: {
+        width: '10px',
+        height: '10px',
+        borderRadius: '50%',
+        background: '#C4A484',
+        boxShadow: '0 0 0 3px rgba(196, 164, 132, 0.2)'
+      },
+      activityConnector: {
+        width: '2px',
+        height: 'calc(100% + 12px)',
+        background: 'rgba(196, 164, 132, 0.2)',
+        position: 'absolute',
+        top: '10px'
+      },
+      activityContent: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px'
+      },
+      activityHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        flexWrap: 'wrap'
+      },
+      activityEmoji: {
+        fontSize: '16px'
+      },
+      activityTitle: {
+        fontSize: '14px',
+        fontWeight: 500,
+        color: '#2C2C2C'
+      },
+      activityTag: {
+        fontSize: '11px',
+        padding: '2px 8px',
+        background: 'rgba(196, 164, 132, 0.15)',
+        borderRadius: '10px',
+        color: '#9B9B9B'
+      },
+      activityDesc: {
+        fontSize: '13px',
+        color: '#9B9B9B'
+      },
+      activityTime: {
+        fontSize: '12px',
+        color: '#9B9B9B'
+      },
+      quoteBlock: {
+        display: 'flex',
+        gap: '12px',
+        padding: '16px 20px',
+        background: 'rgba(255, 255, 255, 0.4)',
+        borderRadius: '16px',
+        border: '1px solid rgba(255, 255, 255, 0.5)'
+      },
+      quoteLine: {
+        width: '4px',
+        background: 'linear-gradient(180deg, #C4A484 0%, #A8B5A0 100%)',
+        borderRadius: '2px'
+      },
+      quoteText: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '15px',
+        fontStyle: 'italic',
+        color: '#6B6B6B',
+        lineHeight: 1.6
+      }
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Dashboard />);
+  </script>
+</body>
+</html>

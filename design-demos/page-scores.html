@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>成绩管理 - 教师助手</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #FDF8F3 0%, #F8F0E8 100%);
+      color: #2C2C2C;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    function ScoresPage() {
+      const [activeTab, setActiveTab] = useState('list');
+      const [selectedExam, setSelectedExam] = useState('期中考试');
+
+      const exams = ['期中考试', '月考一', '月考二', '期末考试'];
+
+      const scores = [
+        { name: '张小明', chinese: 85, math: 92, english: 88, total: 265, rank: 3 },
+        { name: '李小红', chinese: 90, math: 85, english: 91, total: 266, rank: 2 },
+        { name: '王小华', chinese: 78, math: 88, english: 82, total: 248, rank: 5 },
+        { name: '刘小强', chinese: 82, math: 90, english: 85, total: 257, rank: 4 },
+        { name: '陈小美', chinese: 92, math: 94, english: 89, total: 275, rank: 1 }
+      ];
+
+      const stats = {
+        avg: 262.4,
+        max: 275,
+        min: 248,
+        pass: '96%'
+      };
+
+      return (
+        <div style={styles.container}>
+          <div style={styles.orb1}></div>
+          <div style={styles.orb2}></div>
+
+          <aside style={styles.sidebar}>
+            <div style={styles.sidebarHeader}>
+              <div style={styles.logoIcon}>🌿</div>
+              <div>
+                <div style={styles.logoTitle}>教师助手</div>
+                <div style={styles.logoSubtitle}>自然 · 从容</div>
+              </div>
+            </div>
+            <nav style={styles.nav}>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>🏠</span>
+                <span>首页概览</span>
+              </div>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>👤</span>
+                <span>学生管理</span>
+              </div>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>📝</span>
+                <span>评语生成</span>
+              </div>
+              <div style={{...styles.navItem, background: 'rgba(196, 168, 130, 0.2)'}}>
+                <span style={styles.navIcon}>📊</span>
+                <span>成绩分析</span>
+              </div>
+            </nav>
+            <div style={styles.sidebarFooter}>
+              <div style={styles.userCard}>
+                <div style={styles.userAvatar}>张</div>
+                <div>
+                  <div style={styles.userName}>张老师</div>
+                  <div style={styles.userRole}>高三(1)班班主任</div>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <main style={styles.main}>
+            <header style={styles.header}>
+              <div>
+                <h1 style={styles.pageTitle}>📊 成绩管理</h1>
+                <p style={styles.pageSubtitle}>管理学生成绩 · 分析学习趋势</p>
+              </div>
+              <button style={styles.primaryButton}>📤 导入成绩</button>
+            </header>
+
+            {/* Exam Selector */}
+            <div style={styles.examSelector}>
+              {exams.map((exam, i) => (
+                <button
+                  key={i}
+                  style={{
+                    ...styles.examBtn,
+                    background: selectedExam === exam ? '#C4A882' : 'rgba(255, 255, 255, 0.5)',
+                    color: selectedExam === exam ? 'white' : '#6B5B4F'
+                  }}
+                  onClick={() => setSelectedExam(exam)}
+                >
+                  {exam}
+                </button>
+              ))}
+            </div>
+
+            {/* Stats Cards */}
+            <div style={styles.statsRow}>
+              <div style={styles.statCard}>
+                <div style={styles.statIconBig}>📈</div>
+                <div style={styles.statValueBig}>{stats.avg}</div>
+                <div style={styles.statLabelBig}>平均分</div>
+              </div>
+              <div style={styles.statCard}>
+                <div style={styles.statIconBig}>🏆</div>
+                <div style={styles.statValueBig}>{stats.max}</div>
+                <div style={styles.statLabelBig}>最高分</div>
+              </div>
+              <div style={styles.statCard}>
+                <div style={styles.statIconBig}>📉</div>
+                <div style={styles.statValueBig}>{stats.min}</div>
+                <div style={styles.statLabelBig}>最低分</div>
+              </div>
+              <div style={styles.statCard}>
+                <div style={styles.statIconBig}>✅</div>
+                <div style={styles.statValueBig}>{stats.pass}</div>
+                <div style={styles.statLabelBig}>及格率</div>
+              </div>
+            </div>
+
+            {/* Tabs */}
+            <div style={styles.tabs}>
+              <button
+                style={{...styles.tab, borderBottom: activeTab === 'list' ? '2px solid #C4A882' : 'none', color: activeTab === 'list' ? '#C4A882' : '#9B8B7B'}}
+                onClick={() => setActiveTab('list')}
+              >
+                📋 成绩列表
+              </button>
+              <button
+                style={{...styles.tab, borderBottom: activeTab === 'chart' ? '2px solid #C4A882' : 'none', color: activeTab === 'chart' ? '#C4A882' : '#9B8B7B'}}
+                onClick={() => setActiveTab('chart')}
+              >
+                📊 成绩分析
+              </button>
+            </div>
+
+            {activeTab === 'list' ? (
+              <div style={styles.tableContainer}>
+                <table style={styles.table}>
+                  <thead>
+                    <tr style={styles.tableHeader}>
+                      <th style={styles.th}>排名</th>
+                      <th style={styles.th}>姓名</th>
+                      <th style={styles.th}>语文</th>
+                      <th style={styles.th}>数学</th>
+                      <th style={styles.th}>英语</th>
+                      <th style={styles.th}>总分</th>
+                      <th style={styles.th}>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {scores.map((score, i) => (
+                      <tr key={i} style={styles.tableRow}>
+                        <td style={styles.td}>
+                          <span style={{
+                            ...styles.rankBadge,
+                            background: score.rank <= 3 ? ['#FFD700', '#C0C0C0', '#CD7F32'][score.rank - 1] : 'rgba(196, 168, 130, 0.2)',
+                            color: score.rank <= 3 ? 'white' : '#6B5B4F'
+                          }}>
+                            {score.rank}
+                          </span>
+                        </td>
+                        <td style={styles.td}>
+                          <div style={styles.nameCell}>
+                            <div style={styles.miniAvatar}>{score.name[0]}</div>
+                            <span style={styles.nameText}>{score.name}</span>
+                          </div>
+                        </td>
+                        <td style={styles.td}>
+                          <span style={{...styles.scoreCell, color: score.chinese >= 90 ? '#4DAB9A' : score.chinese < 60 ? '#E88C6A' : '#2C2C2C'}}>
+                            {score.chinese}
+                          </span>
+                        </td>
+                        <td style={styles.td}>
+                          <span style={{...styles.scoreCell, color: score.math >= 90 ? '#4DAB9A' : score.math < 60 ? '#E88C6A' : '#2C2C2C'}}>
+                            {score.math}
+                          </span>
+                        </td>
+                        <td style={styles.td}>
+                          <span style={{...styles.scoreCell, color: score.english >= 90 ? '#4DAB9A' : score.english < 60 ? '#E88C6A' : '#2C2C2C'}}>
+                            {score.english}
+                          </span>
+                        </td>
+                        <td style={styles.td}>
+                          <span style={styles.totalScore}>{score.total}</span>
+                        </td>
+                        <td style={styles.td}>
+                          <button style={styles.actionBtnSmall}>详情</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div style={styles.chartContainer}>
+                <div style={styles.glassBlock}>
+                  <div style={styles.blockHeader}>
+                    <h2 style={styles.blockTitle}>📊 各科成绩分布</h2>
+                  </div>
+                  <div style={styles.chartArea}>
+                    {['语文', '数学', '英语'].map((subject, i) => (
+                      <div key={i} style={styles.chartBarGroup}>
+                        <div style={styles.chartLabel}>{subject}</div>
+                        <div style={styles.chartBarContainer}>
+                          <div style={{...styles.chartBar, width: `${[85, 88, 86][i]}%`, background: ['#E8C4A8', '#C5D4B8', '#D4C4E8'][i]}}>
+                            <span style={styles.chartValue}>{[85, 88, 86][i]}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={styles.twoCol}>
+                  <div style={styles.glassBlock}>
+                    <div style={styles.blockHeader}>
+                      <h2 style={styles.blockTitle}>📈 分数段分布</h2>
+                    </div>
+                    <div style={styles.distributionList}>
+                      {[
+                        { range: '90-100分', count: 12, pct: 25 },
+                        { range: '80-89分', count: 20, pct: 42 },
+                        { range: '70-79分', count: 10, pct: 21 },
+                        { range: '60-69分', count: 4, pct: 8 },
+                        { range: '60分以下', count: 2, pct: 4 }
+                      ].map((item, i) => (
+                        <div key={i} style={styles.distItem}>
+                          <div style={styles.distLabel}>
+                            <span>{item.range}</span>
+                            <span style={styles.distCount}>{item.count}人</span>
+                          </div>
+                          <div style={styles.distBar}>
+                            <div style={{...styles.distFill, width: `${item.pct}%`}}></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={styles.glassBlock}>
+                    <div style={styles.blockHeader}>
+                      <h2 style={styles.blockTitle}>🏆 进步之星</h2>
+                    </div>
+                    <div style={styles.improveList}>
+                      {[
+                        { name: '王小华', change: '+15', reason: '数学进步明显' },
+                        { name: '刘小强', change: '+12', reason: '语文成绩提升' },
+                        { name: '陈小美', change: '+8', reason: '英语持续优秀' }
+                      ].map((item, i) => (
+                        <div key={i} style={styles.improveItem}>
+                          <div style={styles.improveRank}>#{i + 1}</div>
+                          <div style={styles.improveInfo}>
+                            <div style={styles.improveName}>{item.name}</div>
+                            <div style={styles.improveReason}>{item.reason}</div>
+                          </div>
+                          <div style={styles.improveChange}>+{item.change}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </main>
+        </div>
+      );
+    }
+
+    const styles = {
+      container: {
+        display: 'flex',
+        minHeight: '100vh',
+        position: 'relative'
+      },
+      orb1: {
+        position: 'fixed',
+        width: '500px',
+        height: '500px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(232, 196, 168, 0.2) 0%, transparent 70%)',
+        top: '-150px',
+        right: '-100px',
+        filter: 'blur(60px)',
+        pointerEvents: 'none'
+      },
+      orb2: {
+        position: 'fixed',
+        width: '400px',
+        height: '400px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(197, 212, 184, 0.15) 0%, transparent 70%)',
+        bottom: '-100px',
+        left: '200px',
+        filter: 'blur(60px)',
+        pointerEvents: 'none'
+      },
+      sidebar: {
+        width: '240px',
+        background: 'rgba(255, 253, 250, 0.8)',
+        backdropFilter: 'blur(20px)',
+        borderRight: '1px solid rgba(255, 255, 255, 0.6)',
+        padding: '24px 16px',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'fixed',
+        height: '100vh',
+        zIndex: 10
+      },
+      sidebarHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '8px 8px 20px',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+        marginBottom: '16px'
+      },
+      logoIcon: {
+        width: '40px',
+        height: '40px',
+        borderRadius: '14px',
+        background: 'linear-gradient(135deg, #C4A882 0%, #A8B89C 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '20px'
+      },
+      logoTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '18px',
+        fontWeight: 600
+      },
+      logoSubtitle: {
+        fontSize: '12px',
+        color: '#9B8B7B'
+      },
+      nav: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px',
+        flex: 1
+      },
+      navItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '10px 14px',
+        borderRadius: '12px',
+        fontSize: '14px',
+        cursor: 'pointer'
+      },
+      navIcon: {
+        fontSize: '18px'
+      },
+      sidebarFooter: {
+        marginTop: 'auto',
+        paddingTop: '16px',
+        borderTop: '1px solid rgba(0, 0, 0, 0.06)'
+      },
+      userCard: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '12px',
+        background: 'rgba(255, 255, 255, 0.6)',
+        borderRadius: '16px'
+      },
+      userAvatar: {
+        width: '40px',
+        height: '40px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #C4A882 0%, #A8B89C 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        fontSize: '16px',
+        fontWeight: 600
+      },
+      userName: { fontSize: '14px', fontWeight: 600 },
+      userRole: { fontSize: '12px', color: '#9B8B7B' },
+      main: {
+        flex: 1,
+        marginLeft: '240px',
+        padding: '32px'
+      },
+      header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '24px'
+      },
+      pageTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '28px',
+        fontWeight: 500,
+        marginBottom: '4px'
+      },
+      pageSubtitle: {
+        fontSize: '14px',
+        color: '#9B8B7B'
+      },
+      primaryButton: {
+        padding: '12px 24px',
+        borderRadius: '14px',
+        border: 'none',
+        background: 'linear-gradient(135deg, #C4A882 0%, #A8B89C 100%)',
+        color: 'white',
+        fontSize: '14px',
+        fontWeight: 600,
+        cursor: 'pointer',
+        boxShadow: '0 4px 16px rgba(196, 168, 130, 0.35)'
+      },
+      examSelector: {
+        display: 'flex',
+        gap: '10px',
+        marginBottom: '20px'
+      },
+      examBtn: {
+        padding: '10px 20px',
+        borderRadius: '12px',
+        border: '1px solid rgba(196, 168, 130, 0.3)',
+        fontSize: '14px',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease'
+      },
+      statsRow: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '16px',
+        marginBottom: '24px'
+      },
+      statCard: {
+        background: 'rgba(255, 253, 250, 0.7)',
+        backdropFilter: 'blur(10px)',
+        borderRadius: '20px',
+        padding: '20px',
+        textAlign: 'center',
+        border: '1px solid rgba(255, 255, 255, 0.6)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.05)'
+      },
+      statIconBig: {
+        fontSize: '28px',
+        marginBottom: '8px'
+      },
+      statValueBig: {
+        fontSize: '32px',
+        fontWeight: 700,
+        color: '#C4A882',
+        marginBottom: '4px'
+      },
+      statLabelBig: {
+        fontSize: '13px',
+        color: '#9B8B7B'
+      },
+      tabs: {
+        display: 'flex',
+        gap: '24px',
+        marginBottom: '20px',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.06)'
+      },
+      tab: {
+        padding: '12px 4px',
+        border: 'none',
+        background: 'transparent',
+        fontSize: '15px',
+        fontWeight: 500,
+        cursor: 'pointer'
+      },
+      tableContainer: {
+        background: 'rgba(255, 253, 250, 0.7)',
+        backdropFilter: 'blur(10px)',
+        borderRadius: '20px',
+        border: '1px solid rgba(255, 255, 255, 0.6)',
+        overflow: 'hidden',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.05)'
+      },
+      table: {
+        width: '100%',
+        borderCollapse: 'collapse'
+      },
+      tableHeader: {
+        background: 'rgba(196, 168, 130, 0.1)'
+      },
+      th: {
+        padding: '14px 16px',
+        textAlign: 'left',
+        fontSize: '13px',
+        fontWeight: 600,
+        color: '#6B5B4F'
+      },
+      tableRow: {
+        borderBottom: '1px solid rgba(0, 0, 0, 0.04)'
+      },
+      td: {
+        padding: '14px 16px',
+        fontSize: '14px'
+      },
+      rankBadge: {
+        width: '28px',
+        height: '28px',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '12px',
+        fontWeight: 700
+      },
+      nameCell: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px'
+      },
+      miniAvatar: {
+        width: '32px',
+        height: '32px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #E8C4A8 0%, #C5D4B8 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '14px',
+        color: 'white',
+        fontWeight: 600
+      },
+      nameText: {
+        fontWeight: 500
+      },
+      scoreCell: {
+        fontWeight: 600
+      },
+      totalScore: {
+        fontSize: '16px',
+        fontWeight: 700,
+        color: '#C4A882'
+      },
+      actionBtnSmall: {
+        padding: '6px 14px',
+        borderRadius: '10px',
+        border: '1px solid rgba(196, 168, 130, 0.4)',
+        background: 'transparent',
+        fontSize: '12px',
+        color: '#6B5B4F',
+        cursor: 'pointer'
+      },
+      chartContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px'
+      },
+      glassBlock: {
+        background: 'rgba(255, 253, 250, 0.7)',
+        backdropFilter: 'blur(10px)',
+        borderRadius: '20px',
+        border: '1px solid rgba(255, 255, 255, 0.6)',
+        padding: '20px',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.05)'
+      },
+      blockHeader: {
+        marginBottom: '16px'
+      },
+      blockTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '16px',
+        fontWeight: 500
+      },
+      chartArea: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px'
+      },
+      chartBarGroup: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px'
+      },
+      chartLabel: {
+        width: '60px',
+        fontSize: '14px',
+        color: '#6B5B4F'
+      },
+      chartBarContainer: {
+        flex: 1,
+        height: '36px',
+        background: 'rgba(0, 0, 0, 0.04)',
+        borderRadius: '10px',
+        overflow: 'hidden'
+      },
+      chartBar: {
+        height: '100%',
+        borderRadius: '10px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        paddingRight: '12px',
+        transition: 'width 0.5s ease'
+      },
+      chartValue: {
+        fontSize: '14px',
+        fontWeight: 600,
+        color: '#2C2C2C'
+      },
+      twoCol: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '20px'
+      },
+      distributionList: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px'
+      },
+      distItem: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '6px'
+      },
+      distLabel: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        fontSize: '13px'
+      },
+      distCount: {
+        color: '#9B8B7B'
+      },
+      distBar: {
+        height: '8px',
+        background: 'rgba(0, 0, 0, 0.06)',
+        borderRadius: '4px',
+        overflow: 'hidden'
+      },
+      distFill: {
+        height: '100%',
+        background: 'linear-gradient(90deg, #C4A882 0%, #A8B89C 100%)',
+        borderRadius: '4px'
+      },
+      improveList: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px'
+      },
+      improveItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '12px',
+        background: 'rgba(255, 255, 255, 0.5)',
+        borderRadius: '12px'
+      },
+      improveRank: {
+        width: '32px',
+        height: '32px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #C4A882 0%, #A8B89C 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        fontSize: '12px',
+        fontWeight: 700
+      },
+      improveInfo: {
+        flex: 1
+      },
+      improveName: {
+        fontSize: '14px',
+        fontWeight: 600
+      },
+      improveReason: {
+        fontSize: '12px',
+        color: '#9B8B7B'
+      },
+      improveChange: {
+        fontSize: '16px',
+        fontWeight: 700,
+        color: '#4DAB9A'
+      }
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<ScoresPage />);
+  </script>
+</body>
+</html>

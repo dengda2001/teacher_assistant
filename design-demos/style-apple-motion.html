@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教师助手 - Apple Motion 流体动效</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      background: #000000;
+      color: #FFFFFF;
+      line-height: 1.4;
+      overflow-x: hidden;
+    }
+    :root {
+      --bg-primary: #000000;
+      --bg-card: rgba(255, 255, 255, 0.05);
+      --bg-card-hover: rgba(255, 255, 255, 0.08);
+      --text-primary: #FFFFFF;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --accent-blue: #0A84FF;
+      --accent-green: #30D158;
+      --accent-orange: #FF9F0A;
+      --accent-purple: #BF5AF2;
+      --border: rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Apple Motion Fluid Dashboard
+    function Dashboard() {
+      const [greeting, setGreeting] = useState('');
+      const [currentDate, setCurrentDate] = useState('');
+      const [hoveredCard, setHoveredCard] = useState(null);
+
+      useEffect(() => {
+        const hour = new Date().getHours();
+        setGreeting(hour < 12 ? '早上好' : hour < 18 ? '下午好' : '晚上好');
+        const date = new Date();
+        const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        setCurrentDate(`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${weekdays[date.getDay()]}`);
+      }, []);
+
+      const stats = [
+        { label: '学生', value: '48', subtext: '人', color: '#0A84FF', gradient: 'linear-gradient(135deg, #0A84FF 0%, #5E5CE6 100%)' },
+        { label: '记录', value: '156', subtext: '条', color: '#30D158', gradient: 'linear-gradient(135deg, #30D158 0%, #64D2FF 100%)' },
+        { label: '待评', value: '12', subtext: '份', color: '#FF9F0A', gradient: 'linear-gradient(135deg, #FF9F0A 0%, #FF375F 100%)' },
+        { label: '均分', value: '82.5', subtext: '分', color: '#BF5AF2', gradient: 'linear-gradient(135deg, #BF5AF2 0%, #FF375F 100%)' }
+      ];
+
+      const activities = [
+        { title: '导入期中成绩', desc: '数学、语文、英语三科成绩', time: '2小时前' },
+        { title: '生成学生评语', desc: '已为15名学生完成评语', time: '5小时前' },
+        { title: '添加表现记录', desc: '张小明课堂表现记录', time: '1天前' }
+      ];
+
+      const quickActions = [
+        { label: '学生管理', icon: '👥', color: '#0A84FF' },
+        { label: '添加记录', icon: '✏️', color: '#30D158' },
+        { label: '生成评语', icon: '💬', color: '#FF9F0A' },
+        { label: '成绩管理', icon: '📈', color: '#BF5AF2' }
+      ];
+
+      return (
+        <div style={styles.container}>
+          {/* Background Gradient Orbs */}
+          <div style={styles.bgOrb1}></div>
+          <div style={styles.bgOrb2}></div>
+
+          {/* Header */}
+          <header style={styles.header}>
+            <div style={styles.headerLeft}>
+              <div style={styles.logoBadge}>
+                <span>📚</span>
+              </div>
+              <div>
+                <div style={styles.logoTitle}>教师助手</div>
+                <div style={styles.logoSubtitle}>智能教学管理平台</div>
+              </div>
+            </div>
+            <div style={styles.userBadge}>
+              <span style={styles.userName}>张老师</span>
+              <div style={styles.userAvatar}>张</div>
+            </div>
+          </header>
+
+          {/* Hero Section */}
+          <section style={styles.hero}>
+            <div style={styles.heroContent}>
+              <h1 style={styles.heroTitle}>
+                <span style={styles.greetingText}>{greeting}</span>
+                <br />
+                <span style={styles.nameText}>张老师</span>
+              </h1>
+              <p style={styles.heroDate}>{currentDate}</p>
+            </div>
+            <div style={styles.todoCard}>
+              <div style={styles.todoIcon}>🔔</div>
+              <div>
+                <div style={styles.todoCount}>3</div>
+                <div style={styles.todoLabel}>待办事项</div>
+              </div>
+            </div>
+          </section>
+
+          {/* Stats Grid */}
+          <section style={styles.section}>
+            <h2 style={styles.sectionTitle}>数据概览</h2>
+            <div style={styles.statsGrid}>
+              {stats.map((stat, i) => (
+                <div
+                  key={i}
+                  style={{
+                    ...styles.statCard,
+                    background: hoveredCard === i ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.05)',
+                    transform: hoveredCard === i ? 'translateY(-4px)' : 'translateY(0)'
+                  }}
+                  onMouseEnter={() => setHoveredCard(i)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
+                  <div style={{...styles.statIcon, background: stat.gradient}}>
+                    <span style={styles.statIconText}>{stat.label[0]}</span>
+                  </div>
+                  <div style={styles.statValueRow}>
+                    <span style={styles.statValue}>{stat.value}</span>
+                    <span style={styles.statSubtext}>{stat.subtext}</span>
+                  </div>
+                  <div style={styles.statLabel}>{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Quick Actions */}
+          <section style={styles.section}>
+            <h2 style={styles.sectionTitle}>快捷操作</h2>
+            <div style={styles.actionsGrid}>
+              {quickActions.map((action, i) => (
+                <button key={i} style={{...styles.actionButton, borderColor: action.color}}>
+                  <span style={styles.actionIcon}>{action.icon}</span>
+                  <span style={styles.actionLabel}>{action.label}</span>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* Activity Timeline */}
+          <section style={styles.section}>
+            <h2 style={styles.sectionTitle}>最近动态</h2>
+            <div style={styles.activityList}>
+              {activities.map((activity, i) => (
+                <div key={i} style={styles.activityItem}>
+                  <div style={styles.activityLine}>
+                    <div style={styles.activityDot}></div>
+                    {i < activities.length - 1 && <div style={styles.activityConnector}></div>}
+                  </div>
+                  <div style={styles.activityContent}>
+                    <div style={styles.activityTitle}>{activity.title}</div>
+                    <div style={styles.activityDesc}>{activity.desc}</div>
+                    <div style={styles.activityTime}>{activity.time}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Bottom Spacer */}
+          <div style={{ height: '40px' }}></div>
+        </div>
+      );
+    }
+
+    const styles = {
+      container: {
+        maxWidth: '800px',
+        margin: '0 auto',
+        padding: '24px 20px',
+        minHeight: '100vh',
+        position: 'relative'
+      },
+      bgOrb1: {
+        position: 'fixed',
+        width: '600px',
+        height: '600px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(10, 132, 255, 0.15) 0%, transparent 70%)',
+        top: '-200px',
+        right: '-200px',
+        pointerEvents: 'none',
+        filter: 'blur(60px)'
+      },
+      bgOrb2: {
+        position: 'fixed',
+        width: '500px',
+        height: '500px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(191, 90, 242, 0.12) 0%, transparent 70%)',
+        bottom: '-150px',
+        left: '-150px',
+        pointerEvents: 'none',
+        filter: 'blur(60px)'
+      },
+      header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '32px',
+        position: 'relative',
+        zIndex: 1
+      },
+      headerLeft: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px'
+      },
+      logoBadge: {
+        width: '44px',
+        height: '44px',
+        borderRadius: '12px',
+        background: 'linear-gradient(135deg, #0A84FF 0%, #5E5CE6 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '22px'
+      },
+      logoTitle: {
+        fontSize: '20px',
+        fontWeight: 600,
+        color: '#FFFFFF',
+        letterSpacing: '-0.3px'
+      },
+      logoSubtitle: {
+        fontSize: '13px',
+        color: 'rgba(255,255,255,0.6)'
+      },
+      userBadge: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        background: 'rgba(255,255,255,0.08)',
+        padding: '6px 6px 6px 16px',
+        borderRadius: '24px',
+        border: '1px solid rgba(255,255,255,0.1)'
+      },
+      userName: {
+        fontSize: '14px',
+        fontWeight: 500,
+        color: '#FFFFFF'
+      },
+      userAvatar: {
+        width: '32px',
+        height: '32px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #30D158 0%, #0A84FF 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '14px',
+        fontWeight: 600
+      },
+      hero: {
+        marginBottom: '36px',
+        position: 'relative',
+        zIndex: 1
+      },
+      heroContent: {
+        marginBottom: '20px'
+      },
+      heroTitle: {
+        fontSize: '40px',
+        fontWeight: 700,
+        lineHeight: 1.2,
+        marginBottom: '8px',
+        letterSpacing: '-0.5px'
+      },
+      greetingText: {
+        background: 'linear-gradient(135deg, #FFFFFF 0%, rgba(255,255,255,0.7) 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent'
+      },
+      nameText: {
+        background: 'linear-gradient(135deg, #0A84FF 0%, #BF5AF2 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent'
+      },
+      heroDate: {
+        fontSize: '15px',
+        color: 'rgba(255,255,255,0.6)'
+      },
+      todoCard: {
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '16px',
+        background: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: '16px',
+        padding: '16px 20px'
+      },
+      todoIcon: {
+        width: '48px',
+        height: '48px',
+        borderRadius: '12px',
+        background: 'linear-gradient(135deg, #FF9F0A 0%, #FF375F 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '24px'
+      },
+      todoCount: {
+        fontSize: '28px',
+        fontWeight: 700,
+        color: '#FFFFFF'
+      },
+      todoLabel: {
+        fontSize: '13px',
+        color: 'rgba(255,255,255,0.6)'
+      },
+      section: {
+        marginBottom: '36px',
+        position: 'relative',
+        zIndex: 1
+      },
+      sectionTitle: {
+        fontSize: '20px',
+        fontWeight: 600,
+        color: '#FFFFFF',
+        marginBottom: '16px',
+        letterSpacing: '-0.3px'
+      },
+      statsGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: '12px'
+      },
+      statCard: {
+        background: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: '20px',
+        padding: '20px',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        cursor: 'pointer'
+      },
+      statIcon: {
+        width: '44px',
+        height: '44px',
+        borderRadius: '12px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: '16px'
+      },
+      statIconText: {
+        fontSize: '20px',
+        fontWeight: 600,
+        color: '#FFFFFF'
+      },
+      statValueRow: {
+        display: 'flex',
+        alignItems: 'baseline',
+        gap: '4px',
+        marginBottom: '4px'
+      },
+      statValue: {
+        fontSize: '32px',
+        fontWeight: 700,
+        color: '#FFFFFF'
+      },
+      statSubtext: {
+        fontSize: '16px',
+        color: 'rgba(255,255,255,0.6)'
+      },
+      statLabel: {
+        fontSize: '14px',
+        color: 'rgba(255,255,255,0.5)'
+      },
+      actionsGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '10px'
+      },
+      actionButton: {
+        background: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: '16px',
+        padding: '18px 10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '10px',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        fontSize: '13px',
+        color: '#FFFFFF'
+      },
+      actionIcon: {
+        fontSize: '24px'
+      },
+      actionLabel: {
+        fontWeight: 500
+      },
+      activityList: {
+        background: 'rgba(255,255,255,0.03)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: '20px',
+        padding: '8px 0'
+      },
+      activityItem: {
+        display: 'flex',
+        gap: '16px',
+        padding: '16px 20px',
+        position: 'relative'
+      },
+      activityLine: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        position: 'relative'
+      },
+      activityDot: {
+        width: '10px',
+        height: '10px',
+        borderRadius: '50%',
+        background: '#0A84FF',
+        boxShadow: '0 0 0 4px rgba(10, 132, 255, 0.2)'
+      },
+      activityConnector: {
+        width: '2px',
+        height: 'calc(100% + 16px)',
+        background: 'rgba(255,255,255,0.1)',
+        position: 'absolute',
+        top: '10px'
+      },
+      activityContent: {
+        flex: 1,
+        paddingBottom: '8px'
+      },
+      activityTitle: {
+        fontSize: '15px',
+        fontWeight: 600,
+        color: '#FFFFFF',
+        marginBottom: '4px'
+      },
+      activityDesc: {
+        fontSize: '13px',
+        color: 'rgba(255,255,255,0.6)',
+        marginBottom: '4px'
+      },
+      activityTime: {
+        fontSize: '12px',
+        color: 'rgba(255,255,255,0.4)'
+      }
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Dashboard />);
+  </script>
+</body>
+</html>

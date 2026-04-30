@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>评语生成 - 教师助手</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #FDF8F3 0%, #F8F0E8 100%);
+      color: #2C2C2C;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    function CommentsPage() {
+      const [selectedStudent, setSelectedStudent] = useState(null);
+      const [isGenerating, setIsGenerating] = useState(false);
+      const [generatedComment, setGeneratedComment] = useState('');
+
+      const students = [
+        { name: '张小明', avatar: '明', traits: ['积极', '数学好', '乐于助人'] },
+        { name: '李小红', avatar: '红', traits: ['文静', '语文好', '细心'] },
+        { name: '王小华', avatar: '华', traits: ['活泼', '体育好', '团结同学'] },
+        { name: '刘小强', avatar: '强', traits: ['踏实', '进步快', '认真'] },
+        { name: '陈小美', avatar: '美', traits: ['细心', '英语好', '有创意'] }
+      ];
+
+      const templates = [
+        { title: '全面评价', desc: '涵盖学习、品德、活动等方面' },
+        { title: '学习表现', desc: '重点关注学业成绩和态度' },
+        { title: '行为表现', desc: '侧重纪律、礼仪、合作等' }
+      ];
+
+      const handleGenerate = () => {
+        setIsGenerating(true);
+        setTimeout(() => {
+          setIsGenerating(false);
+          setGeneratedComment('张小明同学本学期表现优秀，学习态度端正，数学成绩突出。课堂上积极发言，乐于助人，是同学们的好榜样。希望在今后的学习中继续保持，争取更大进步！');
+        }, 2000);
+      };
+
+      return (
+        <div style={styles.container}>
+          <div style={styles.orb1}></div>
+          <div style={styles.orb2}></div>
+
+          <aside style={styles.sidebar}>
+            <div style={styles.sidebarHeader}>
+              <div style={styles.logoIcon}>🌿</div>
+              <div>
+                <div style={styles.logoTitle}>教师助手</div>
+                <div style={styles.logoSubtitle}>自然 · 从容</div>
+              </div>
+            </div>
+            <nav style={styles.nav}>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>🏠</span>
+                <span>首页概览</span>
+              </div>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>👤</span>
+                <span>学生管理</span>
+              </div>
+              <div style={{...styles.navItem, background: 'rgba(196, 168, 130, 0.2)'}}>
+                <span style={styles.navIcon}>📝</span>
+                <span>评语生成</span>
+              </div>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>📊</span>
+                <span>成绩分析</span>
+              </div>
+            </nav>
+            <div style={styles.sidebarFooter}>
+              <div style={styles.userCard}>
+                <div style={styles.userAvatar}>张</div>
+                <div>
+                  <div style={styles.userName}>张老师</div>
+                  <div style={styles.userRole}>高三(1)班班主任</div>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <main style={styles.main}>
+            <header style={styles.header}>
+              <div>
+                <h1 style={styles.pageTitle}>📝 评语生成</h1>
+                <p style={styles.pageSubtitle}>AI 辅助生成学生评语 · 共 12 份待生成</p>
+              </div>
+            </header>
+
+            <div style={styles.twoColumn}>
+              {/* Left - Student Selection */}
+              <div style={styles.column}>
+                <div style={styles.glassBlock}>
+                  <div style={styles.blockHeader}>
+                    <h2 style={styles.blockTitle}>👤 选择学生</h2>
+                    <span style={styles.badge}>12 待生成</span>
+                  </div>
+                  <div style={styles.studentList}>
+                    {students.map((student, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          ...styles.studentItem,
+                          background: selectedStudent === i ? 'rgba(196, 168, 130, 0.2)' : 'rgba(255, 255, 255, 0.5)',
+                          borderColor: selectedStudent === i ? '#C4A882' : 'transparent'
+                        }}
+                        onClick={() => setSelectedStudent(i)}
+                      >
+                        <div style={styles.studentAvatarSmall}>{student.avatar}</div>
+                        <div style={styles.studentInfoSmall}>
+                          <div style={styles.studentNameSmall}>{student.name}</div>
+                          <div style={styles.studentTagsSmall}>
+                            {student.traits.map((t, j) => (
+                              <span key={j} style={styles.traitTag}>{t}</span>
+                            ))}
+                          </div>
+                        </div>
+                        {selectedStudent === i && <span style={styles.checkIcon}>✓</span>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={styles.glassBlock}>
+                  <div style={styles.blockHeader}>
+                    <h2 style={styles.blockTitle}>📋 评语模板</h2>
+                  </div>
+                  <div style={styles.templateList}>
+                    {templates.map((template, i) => (
+                      <div key={i} style={styles.templateItem}>
+                        <div style={styles.templateRadio}></div>
+                        <div>
+                          <div style={styles.templateTitle}>{template.title}</div>
+                          <div style={styles.templateDesc}>{template.desc}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right - Generation */}
+              <div style={styles.column}>
+                <div style={styles.glassBlock}>
+                  <div style={styles.blockHeader}>
+                    <h2 style={styles.blockTitle}>✨ 生成评语</h2>
+                  </div>
+
+                  {selectedStudent !== null ? (
+                    <>
+                      <div style={styles.selectedStudentBar}>
+                        <div style={styles.studentAvatarSmall}>{students[selectedStudent].avatar}</div>
+                        <span style={styles.selectedStudentName}>{students[selectedStudent].name}</span>
+                      </div>
+
+                      <div style={styles.traitsSection}>
+                        <div style={styles.sectionLabel}>表现特点（可多选）</div>
+                        <div style={styles.traitsGrid}>
+                          {['学习积极', '团结同学', '乐于助人', '思维活跃', '遵守纪律', '有进步', '认真负责', '有创意'].map((trait, i) => (
+                            <button key={i} style={styles.traitBtn}>{trait}</button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div style={styles.lengthSection}>
+                        <div style={styles.sectionLabel}>评语长度</div>
+                        <div style={styles.lengthOptions}>
+                          <button style={{...styles.lengthBtn, background: '#C4A882', color: 'white'}}>简短</button>
+                          <button style={styles.lengthBtn}>适中</button>
+                          <button style={styles.lengthBtn}>详细</button>
+                        </div>
+                      </div>
+
+                      {!generatedComment ? (
+                        <button
+                          style={styles.generateBtn}
+                          onClick={handleGenerate}
+                          disabled={isGenerating}
+                        >
+                          {isGenerating ? (
+                            <><span style={styles.spinner}>⚡</span> 生成中...</>
+                          ) : (
+                            <>🪄 生成评语</>
+                          )}
+                        </button>
+                      ) : (
+                        <>
+                          <div style={styles.resultBox}>
+                            <div style={styles.resultLabel}>生成结果</div>
+                            <p style={styles.resultText}>{generatedComment}</p>
+                          </div>
+                          <div style={styles.actionButtons}>
+                            <button style={styles.secondaryBtn} onClick={() => setGeneratedComment('')}>重新生成</button>
+                            <button style={styles.primaryBtn}>保存评语</button>
+                          </div>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <div style={styles.emptyState}>
+                      <div style={styles.emptyIcon}>👈</div>
+                      <p style={styles.emptyText}>请选择左侧学生开始生成评语</p>
+                    </div>
+                  )}
+                </div>
+
+                <div style={styles.tipsBlock}>
+                  <div style={styles.tipsIcon}>💡</div>
+                  <div style={styles.tipsContent}>
+                    <div style={styles.tipsTitle}>小贴士</div>
+                    <div style={styles.tipsText}>选择具体的表现特点可以让评语更个性化。建议结合学生的实际表现选择 2-3 个特点。</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    const styles = {
+      container: {
+        display: 'flex',
+        minHeight: '100vh',
+        position: 'relative'
+      },
+      orb1: {
+        position: 'fixed',
+        width: '500px',
+        height: '500px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(232, 196, 168, 0.2) 0%, transparent 70%)',
+        top: '-150px',
+        right: '-100px',
+        filter: 'blur(60px)',
+        pointerEvents: 'none'
+      },
+      orb2: {
+        position: 'fixed',
+        width: '400px',
+        height: '400px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(197, 212, 184, 0.15) 0%, transparent 70%)',
+        bottom: '-100px',
+        left: '200px',
+        filter: 'blur(60px)',
+        pointerEvents: 'none'
+      },
+      sidebar: {
+        width: '240px',
+        background: 'rgba(255, 253, 250, 0.8)',
+        backdropFilter: 'blur(20px)',
+        borderRight: '1px solid rgba(255, 255, 255, 0.6)',
+        padding: '24px 16px',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'fixed',
+        height: '100vh',
+        zIndex: 10
+      },
+      sidebarHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '8px 8px 20px',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+        marginBottom: '16px'
+      },
+      logoIcon: {
+        width: '40px',
+        height: '40px',
+        borderRadius: '14px',
+        background: 'linear-gradient(135deg, #C4A882 0%, #A8B89C 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '20px'
+      },
+      logoTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '18px',
+        fontWeight: 600
+      },
+      logoSubtitle: {
+        fontSize: '12px',
+        color: '#9B8B7B'
+      },
+      nav: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px',
+        flex: 1
+      },
+      navItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '10px 14px',
+        borderRadius: '12px',
+        fontSize: '14px',
+        cursor: 'pointer'
+      },
+      navIcon: {
+        fontSize: '18px'
+      },
+      sidebarFooter: {
+        marginTop: 'auto',
+        paddingTop: '16px',
+        borderTop: '1px solid rgba(0, 0, 0, 0.06)'
+      },
+      userCard: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '12px',
+        background: 'rgba(255, 255, 255, 0.6)',
+        borderRadius: '16px'
+      },
+      userAvatar: {
+        width: '40px',
+        height: '40px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #C4A882 0%, #A8B89C 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        fontSize: '16px',
+        fontWeight: 600
+      },
+      userName: { fontSize: '14px', fontWeight: 600 },
+      userRole: { fontSize: '12px', color: '#9B8B7B' },
+      main: {
+        flex: 1,
+        marginLeft: '240px',
+        padding: '32px'
+      },
+      header: {
+        marginBottom: '24px'
+      },
+      pageTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '28px',
+        fontWeight: 500,
+        marginBottom: '4px'
+      },
+      pageSubtitle: {
+        fontSize: '14px',
+        color: '#9B8B7B'
+      },
+      twoColumn: {
+        display: 'grid',
+        gridTemplateColumns: '360px 1fr',
+        gap: '20px'
+      },
+      column: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px'
+      },
+      glassBlock: {
+        background: 'rgba(255, 253, 250, 0.7)',
+        backdropFilter: 'blur(20px)',
+        borderRadius: '20px',
+        border: '1px solid rgba(255, 255, 255, 0.6)',
+        padding: '20px',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.05)'
+      },
+      blockHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '16px'
+      },
+      blockTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '16px',
+        fontWeight: 500
+      },
+      badge: {
+        fontSize: '12px',
+        padding: '4px 10px',
+        background: 'rgba(196, 168, 130, 0.2)',
+        borderRadius: '12px',
+        color: '#C4A882',
+        fontWeight: 500
+      },
+      studentList: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px'
+      },
+      studentItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '12px',
+        borderRadius: '14px',
+        border: '2px solid transparent',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease'
+      },
+      studentAvatarSmall: {
+        width: '40px',
+        height: '40px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #E8C4A8 0%, #C5D4B8 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '16px',
+        fontWeight: 600,
+        color: 'white'
+      },
+      studentInfoSmall: {
+        flex: 1
+      },
+      studentNameSmall: {
+        fontSize: '15px',
+        fontWeight: 600,
+        marginBottom: '4px'
+      },
+      studentTagsSmall: {
+        display: 'flex',
+        gap: '4px',
+        flexWrap: 'wrap'
+      },
+      traitTag: {
+        fontSize: '11px',
+        padding: '2px 8px',
+        background: 'rgba(196, 168, 130, 0.15)',
+        borderRadius: '8px',
+        color: '#6B5B4F'
+      },
+      checkIcon: {
+        width: '24px',
+        height: '24px',
+        borderRadius: '50%',
+        background: '#C4A882',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '14px',
+        fontWeight: 700
+      },
+      templateList: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px'
+      },
+      templateItem: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '12px',
+        padding: '12px',
+        background: 'rgba(255, 255, 255, 0.5)',
+        borderRadius: '12px',
+        cursor: 'pointer'
+      },
+      templateRadio: {
+        width: '18px',
+        height: '18px',
+        borderRadius: '50%',
+        border: '2px solid #C4A882',
+        marginTop: '2px'
+      },
+      templateTitle: {
+        fontSize: '14px',
+        fontWeight: 500,
+        marginBottom: '2px'
+      },
+      templateDesc: {
+        fontSize: '12px',
+        color: '#9B8B7B'
+      },
+      selectedStudentBar: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        padding: '12px 16px',
+        background: 'rgba(196, 168, 130, 0.15)',
+        borderRadius: '12px',
+        marginBottom: '20px'
+      },
+      selectedStudentName: {
+        fontSize: '16px',
+        fontWeight: 600
+      },
+      traitsSection: {
+        marginBottom: '20px'
+      },
+      sectionLabel: {
+        fontSize: '13px',
+        fontWeight: 500,
+        color: '#6B5B4F',
+        marginBottom: '10px'
+      },
+      traitsGrid: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '8px'
+      },
+      traitBtn: {
+        padding: '8px 14px',
+        borderRadius: '20px',
+        border: '1px solid rgba(196, 168, 130, 0.3)',
+        background: 'rgba(255, 255, 255, 0.5)',
+        fontSize: '13px',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease'
+      },
+      lengthSection: {
+        marginBottom: '20px'
+      },
+      lengthOptions: {
+        display: 'flex',
+        gap: '8px'
+      },
+      lengthBtn: {
+        flex: 1,
+        padding: '10px',
+        borderRadius: '10px',
+        border: '1px solid rgba(196, 168, 130, 0.3)',
+        background: 'rgba(255, 255, 255, 0.5)',
+        fontSize: '13px',
+        cursor: 'pointer'
+      },
+      generateBtn: {
+        width: '100%',
+        padding: '14px',
+        borderRadius: '14px',
+        border: 'none',
+        background: 'linear-gradient(135deg, #C4A882 0%, #A8B89C 100%)',
+        color: 'white',
+        fontSize: '15px',
+        fontWeight: 600,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
+        boxShadow: '0 4px 16px rgba(196, 168, 130, 0.35)'
+      },
+      spinner: {
+        animation: 'spin 1s linear infinite'
+      },
+      resultBox: {
+        padding: '16px',
+        background: 'rgba(255, 255, 255, 0.7)',
+        borderRadius: '14px',
+        marginBottom: '16px'
+      },
+      resultLabel: {
+        fontSize: '12px',
+        fontWeight: 500,
+        color: '#9B8B7B',
+        marginBottom: '8px'
+      },
+      resultText: {
+        fontSize: '14px',
+        lineHeight: 1.7,
+        color: '#2C2C2C'
+      },
+      actionButtons: {
+        display: 'flex',
+        gap: '10px'
+      },
+      secondaryBtn: {
+        flex: 1,
+        padding: '12px',
+        borderRadius: '12px',
+        border: '1px solid rgba(196, 168, 130, 0.4)',
+        background: 'transparent',
+        fontSize: '14px',
+        color: '#6B5B4F',
+        cursor: 'pointer'
+      },
+      primaryBtn: {
+        flex: 1,
+        padding: '12px',
+        borderRadius: '12px',
+        border: 'none',
+        background: '#C4A882',
+        fontSize: '14px',
+        color: 'white',
+        fontWeight: 600,
+        cursor: 'pointer'
+      },
+      emptyState: {
+        padding: '40px 20px',
+        textAlign: 'center'
+      },
+      emptyIcon: {
+        fontSize: '40px',
+        marginBottom: '12px'
+      },
+      emptyText: {
+        fontSize: '14px',
+        color: '#9B8B7B'
+      },
+      tipsBlock: {
+        display: 'flex',
+        gap: '12px',
+        padding: '16px 20px',
+        background: 'rgba(254, 243, 199, 0.5)',
+        borderRadius: '16px',
+        border: '1px solid rgba(251, 191, 36, 0.2)'
+      },
+      tipsIcon: {
+        fontSize: '20px'
+      },
+      tipsContent: {
+        flex: 1
+      },
+      tipsTitle: {
+        fontSize: '13px',
+        fontWeight: 600,
+        color: '#92400E',
+        marginBottom: '2px'
+      },
+      tipsText: {
+        fontSize: '12px',
+        color: '#A16207'
+      }
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<CommentsPage />);
+  </script>
+</body>
+</html>

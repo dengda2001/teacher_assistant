@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教师助手 - Kinfolk 自然主义</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #FAF8F5;
+      color: #2C2C2C;
+      line-height: 1.6;
+    }
+    :root {
+      --bg-warm: #FAF8F5;
+      --bg-card: #FFFFFF;
+      --text-primary: #2C2C2C;
+      --text-secondary: #6B6B6B;
+      --text-muted: #9B9B9B;
+      --accent-terracotta: #C4A484;
+      --accent-sage: #A8B5A0;
+      --accent-clay: #D4C5B9;
+      --border-light: #E8E4DF;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Kinfolk Naturalism Dashboard
+    function Dashboard() {
+      const [greeting, setGreeting] = useState('');
+      const [currentDate, setCurrentDate] = useState('');
+
+      useEffect(() => {
+        const hour = new Date().getHours();
+        setGreeting(hour < 12 ? '早上好' : hour < 18 ? '下午好' : '晚上好');
+        const date = new Date();
+        const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        setCurrentDate(`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${weekdays[date.getDay()]}`);
+      }, []);
+
+      const stats = [
+        { label: '学生', value: '48', desc: '位小可爱', icon: '👨‍🎓' },
+        { label: '记录', value: '156', desc: '条表现', icon: '✨' },
+        { label: '待评', value: '12', desc: '份评语', icon: '📝' },
+        { label: '均分', value: '82.5', desc: '班级平均', icon: '📊' }
+      ];
+
+      const activities = [
+        { title: '导入期中成绩', desc: '数学、语文、英语三科', time: '2小时前', type: 'success' },
+        { title: '生成学生评语', desc: '为15名学生生成评语', time: '5小时前', type: 'primary' },
+        { title: '添加表现记录', desc: '张小明同学的课堂表现', time: '1天前', type: 'warning' }
+      ];
+
+      const quickActions = [
+        { label: '学生管理', icon: '👥', color: '#A8B5A0' },
+        { label: '添加记录', icon: '✏️', color: '#C4A484' },
+        { label: '生成评语', icon: '💬', color: '#D4A5A5' },
+        { label: '成绩管理', icon: '📈', color: '#9BB5CE' }
+      ];
+
+      return (
+        <div style={styles.container}>
+          {/* Header */}
+          <header style={styles.header}>
+            <div style={styles.logo}>
+              <span style={styles.logoIcon}>🌿</span>
+              <div>
+                <div style={styles.logoTitle}>教师助手</div>
+                <div style={styles.logoSubtitle}>自然 · 从容 · 陪伴</div>
+              </div>
+            </div>
+            <div style={styles.user}>
+              <div style={styles.avatar}>张</div>
+            </div>
+          </header>
+
+          {/* Welcome Section */}
+          <section style={styles.welcomeSection}>
+            <div style={styles.welcomeCard}>
+              <div style={styles.welcomeContent}>
+                <h1 style={styles.welcomeTitle}>
+                  <span style={styles.greeting}>{greeting}</span>，
+                  <br />
+                  <span style={styles.name}>张老师</span>
+                </h1>
+                <p style={styles.welcomeDate}>{currentDate}</p>
+                <div style={styles.todoBadge}>
+                  <span>🌸</span>
+                  <span>今日有 3 项待办</span>
+                </div>
+              </div>
+              <div style={styles.welcomeDeco}>
+                <div style={styles.circle1}></div>
+                <div style={styles.circle2}></div>
+              </div>
+            </div>
+          </section>
+
+          {/* Stats Grid */}
+          <section style={styles.section}>
+            <h2 style={styles.sectionTitle}>数据一览</h2>
+            <div style={styles.statsGrid}>
+              {stats.map((stat, i) => (
+                <div key={i} style={styles.statCard}>
+                  <div style={styles.statIcon}>{stat.icon}</div>
+                  <div style={styles.statValue}>{stat.value}</div>
+                  <div style={styles.statLabel}>{stat.label}</div>
+                  <div style={styles.statDesc}>{stat.desc}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Quick Actions */}
+          <section style={styles.section}>
+            <h2 style={styles.sectionTitle}>快捷入口</h2>
+            <div style={styles.actionsGrid}>
+              {quickActions.map((action, i) => (
+                <button key={i} style={{...styles.actionCard, borderColor: action.color}}>
+                  <span style={styles.actionIcon}>{action.icon}</span>
+                  <span style={styles.actionLabel}>{action.label}</span>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* Recent Activity */}
+          <section style={styles.section}>
+            <h2 style={styles.sectionTitle}>最近动态</h2>
+            <div style={styles.activityList}>
+              {activities.map((activity, i) => (
+                <div key={i} style={styles.activityItem}>
+                  <div style={styles.activityDot}></div>
+                  <div style={styles.activityContent}>
+                    <div style={styles.activityTitle}>{activity.title}</div>
+                    <div style={styles.activityDesc}>{activity.desc}</div>
+                    <div style={styles.activityTime}>{activity.time}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer style={styles.footer}>
+            <p>用温柔的方式，记录每一份成长 🌱</p>
+          </footer>
+        </div>
+      );
+    }
+
+    const styles = {
+      container: {
+        maxWidth: '800px',
+        margin: '0 auto',
+        padding: '24px 20px',
+        minHeight: '100vh'
+      },
+      header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '32px'
+      },
+      logo: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px'
+      },
+      logoIcon: {
+        fontSize: '28px'
+      },
+      logoTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '22px',
+        fontWeight: 600,
+        color: '#2C2C2C',
+        letterSpacing: '-0.5px'
+      },
+      logoSubtitle: {
+        fontSize: '12px',
+        color: '#9B9B9B',
+        letterSpacing: '0.5px'
+      },
+      user: {
+        display: 'flex',
+        alignItems: 'center'
+      },
+      avatar: {
+        width: '40px',
+        height: '40px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #C4A484 0%, #A8B5A0 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        fontSize: '16px',
+        fontWeight: 500
+      },
+      welcomeSection: {
+        marginBottom: '40px'
+      },
+      welcomeCard: {
+        background: 'linear-gradient(135deg, #F5F1EC 0%, #FAF8F5 100%)',
+        borderRadius: '24px',
+        padding: '32px',
+        position: 'relative',
+        overflow: 'hidden',
+        border: '1px solid #E8E4DF'
+      },
+      welcomeContent: {
+        position: 'relative',
+        zIndex: 1
+      },
+      welcomeTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '32px',
+        fontWeight: 400,
+        color: '#2C2C2C',
+        marginBottom: '8px',
+        lineHeight: 1.3
+      },
+      greeting: {
+        fontStyle: 'italic'
+      },
+      name: {
+        fontWeight: 500
+      },
+      welcomeDate: {
+        fontSize: '14px',
+        color: '#6B6B6B',
+        marginBottom: '20px'
+      },
+      todoBadge: {
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+        background: 'white',
+        padding: '10px 16px',
+        borderRadius: '20px',
+        fontSize: '14px',
+        color: '#6B6B6B',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+      },
+      welcomeDeco: {
+        position: 'absolute',
+        right: '-20px',
+        top: '-20px',
+        width: '200px',
+        height: '200px'
+      },
+      circle1: {
+        position: 'absolute',
+        width: '120px',
+        height: '120px',
+        borderRadius: '50%',
+        background: 'rgba(196, 164, 132, 0.15)',
+        right: '20px',
+        top: '20px'
+      },
+      circle2: {
+        position: 'absolute',
+        width: '80px',
+        height: '80px',
+        borderRadius: '50%',
+        background: 'rgba(168, 181, 160, 0.2)',
+        right: '80px',
+        top: '80px'
+      },
+      section: {
+        marginBottom: '40px'
+      },
+      sectionTitle: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '18px',
+        fontWeight: 500,
+        color: '#2C2C2C',
+        marginBottom: '20px',
+        letterSpacing: '-0.3px'
+      },
+      statsGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: '16px'
+      },
+      statCard: {
+        background: 'white',
+        borderRadius: '20px',
+        padding: '24px 20px',
+        textAlign: 'center',
+        border: '1px solid #E8E4DF',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        cursor: 'pointer'
+      },
+      statIcon: {
+        fontSize: '28px',
+        marginBottom: '12px'
+      },
+      statValue: {
+        fontFamily: '"Newsreader", serif',
+        fontSize: '36px',
+        fontWeight: 500,
+        color: '#2C2C2C',
+        marginBottom: '4px'
+      },
+      statLabel: {
+        fontSize: '14px',
+        color: '#6B6B6B',
+        marginBottom: '2px'
+      },
+      statDesc: {
+        fontSize: '12px',
+        color: '#9B9B9B'
+      },
+      actionsGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '12px'
+      },
+      actionCard: {
+        background: 'white',
+        border: '2px solid transparent',
+        borderRadius: '16px',
+        padding: '20px 12px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '10px',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        fontSize: '13px',
+        color: '#2C2C2C'
+      },
+      actionIcon: {
+        fontSize: '24px'
+      },
+      actionLabel: {
+        fontWeight: 500
+      },
+      activityList: {
+        background: 'white',
+        borderRadius: '20px',
+        padding: '8px 20px',
+        border: '1px solid #E8E4DF'
+      },
+      activityItem: {
+        display: 'flex',
+        gap: '16px',
+        padding: '20px 0',
+        borderBottom: '1px solid #F0EDE8',
+        position: 'relative'
+      },
+      activityDot: {
+        width: '10px',
+        height: '10px',
+        borderRadius: '50%',
+        background: '#C4A484',
+        marginTop: '6px',
+        flexShrink: 0
+      },
+      activityContent: {
+        flex: 1
+      },
+      activityTitle: {
+        fontSize: '15px',
+        fontWeight: 500,
+        color: '#2C2C2C',
+        marginBottom: '4px'
+      },
+      activityDesc: {
+        fontSize: '13px',
+        color: '#6B6B6B',
+        marginBottom: '6px'
+      },
+      activityTime: {
+        fontSize: '12px',
+        color: '#9B9B9B'
+      },
+      footer: {
+        textAlign: 'center',
+        padding: '40px 0',
+        color: '#9B9B9B',
+        fontSize: '14px'
+      }
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Dashboard />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教师助手 - Notion 模块构成</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #FFFFFF;
+      color: #37352F;
+      line-height: 1.5;
+    }
+    :root {
+      --bg-primary: #FFFFFF;
+      --bg-sidebar: #F7F6F3;
+      --bg-hover: #F1F1EF;
+      --text-primary: #37352F;
+      --text-secondary: #6B6B6B;
+      --text-muted: #9B9B9B;
+      --accent-default: #FD7E14;
+      --accent-blue: #2E7FF6;
+      --accent-green: #4DAB9A;
+      --accent-yellow: #FFDC49;
+      --border: #E9E9E7;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Notion Modular Dashboard
+    function Dashboard() {
+      const [greeting, setGreeting] = useState('');
+      const [currentDate, setCurrentDate] = useState('');
+      const [hoveredBlock, setHoveredBlock] = useState(null);
+
+      useEffect(() => {
+        const hour = new Date().getHours();
+        setGreeting(hour < 12 ? '早上好' : hour < 18 ? '下午好' : '晚上好');
+        const date = new Date();
+        const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        setCurrentDate(`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${weekdays[date.getDay()]}`);
+      }, []);
+
+      const stats = [
+        { label: '学生总数', value: '48', icon: '👤', color: '#E3F2FD' },
+        { label: '表现记录', value: '156', icon: '⭐', color: '#E8F5E9' },
+        { label: '待生成评语', value: '12', icon: '📝', color: '#FFF3E0' },
+        { label: '班级均分', value: '82.5', icon: '📊', color: '#F3E5F5' }
+      ];
+
+      const quickLinks = [
+        { emoji: '👥', label: '学生管理', color: '#FEE1E1' },
+        { emoji: '✏️', label: '添加记录', color: '#E1F5FE' },
+        { emoji: '💬', label: '生成评语', color: '#FFF9C4' },
+        { emoji: '📈', label: '成绩管理', color: '#F3E5F5' }
+      ];
+
+      const activities = [
+        { emoji: '✅', title: '导入期中成绩', time: '2小时前', tag: '成绩' },
+        { emoji: '💬', title: '生成学生评语', time: '5小时前', tag: '评语' },
+        { emoji: '⭐', title: '添加表现记录', time: '1天前', tag: '记录' }
+      ];
+
+      const todos = [
+        { text: '为张小明生成本学期评语', checked: false },
+        { text: '导入本周数学测验成绩', checked: true },
+        { text: '更新家长会材料', checked: false }
+      ];
+
+      return (
+        <div style={styles.container}>
+          {/* Sidebar */}
+          <aside style={styles.sidebar}>
+            <div style={styles.sidebarHeader}>
+              <div style={styles.workspaceIcon}>📚</div>
+              <div style={styles.workspaceName}>教师助手</div>
+            </div>
+            <nav style={styles.nav}>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>🏠</span>
+                <span>首页</span>
+              </div>
+              <div style={{...styles.navItem, background: '#F1F1EF'}}>
+                <span style={styles.navIcon}>📊</span>
+                <span>数据概览</span>
+              </div>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>👤</span>
+                <span>学生管理</span>
+              </div>
+              <div style={styles.navItem}>
+                <span style={styles.navIcon}>📝</span>
+                <span>评语生成</span>
+              </div>
+            </nav>
+          </aside>
+
+          {/* Main Content */}
+          <main style={styles.main}>
+            {/* Breadcrumb */}
+            <div style={styles.breadcrumb}>
+              <span style={styles.breadcrumbItem}>教师助手</span>
+              <span style={styles.breadcrumbSep}>/</span>
+              <span style={styles.breadcrumbCurrent}>数据概览</span>
+            </div>
+
+            {/* Page Title */}
+            <div style={styles.pageHeader}>
+              <div>
+                <h1 style={styles.pageTitle}>👋 {greeting}，张老师</h1>
+                <p style={styles.pageDate}>{currentDate}</p>
+              </div>
+              <div style={styles.headerActions}>
+                <button style={styles.actionBtn}>分享</button>
+                <button style={styles.primaryBtn}>+ 新建</button>
+              </div>
+            </div>
+
+            {/* Content Blocks */}
+            <div style={styles.content}>
+              {/* Callout Block */}
+              <div style={styles.callout}>
+                <span style={styles.calloutIcon}>💡</span>
+                <div style={styles.calloutText}>
+                  今日有 <strong>3 项待办事项</strong> 需要处理，包括 2 份待生成评语和 1 个成绩导入任务。
+                </div>
+              </div>
+
+              {/* Stats Grid */}
+              <div style={styles.block}>
+                <div style={styles.blockHeader}>
+                  <span style={styles.toggle}>▶</span>
+                  <h2 style={styles.blockTitle}>📊 数据概览</h2>
+                </div>
+                <div style={styles.statsGrid}>
+                  {stats.map((stat, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        ...styles.statBlock,
+                        backgroundColor: hoveredBlock === i ? '#F7F6F3' : stat.color,
+                        transform: hoveredBlock === i ? 'translateY(-2px)' : 'none'
+                      }}
+                      onMouseEnter={() => setHoveredBlock(i)}
+                      onMouseLeave={() => setHoveredBlock(null)}
+                    >
+                      <div style={styles.statEmoji}>{stat.icon}</div>
+                      <div style={styles.statValue}>{stat.value}</div>
+                      <div style={styles.statLabel}>{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Two Column Layout */}
+              <div style={styles.twoColumn}>
+                {/* Left: Quick Links */}
+                <div style={styles.column}>
+                  <div style={styles.blockHeader}>
+                    <h2 style={styles.blockTitle}>🔗 快捷入口</h2>
+                  </div>
+                  <div style={styles.linksGrid}>
+                    {quickLinks.map((link, i) => (
+                      <div key={i} style={{...styles.linkBlock, backgroundColor: link.color}}>
+                        <span style={styles.linkEmoji}>{link.emoji}</span>
+                        <span style={styles.linkLabel}>{link.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right: Todos */}
+                <div style={styles.column}>
+                  <div style={styles.blockHeader}>
+                    <h2 style={styles.blockTitle}>✅ 今日待办</h2>
+                  </div>
+                  <div style={styles.todoList}>
+                    {todos.map((todo, i) => (
+                      <div key={i} style={styles.todoItem}>
+                        <div style={{
+                          ...styles.checkbox,
+                          backgroundColor: todo.checked ? '#4DAB9A' : 'transparent',
+                          borderColor: todo.checked ? '#4DAB9A' : '#D1D1D1'
+                        }}>
+                          {todo.checked && <span style={styles.checkmark}>✓</span>}
+                        </div>
+                        <span style={{
+                          ...styles.todoText,
+                          textDecoration: todo.checked ? 'line-through' : 'none',
+                          color: todo.checked ? '#9B9B9B' : '#37352F'
+                        }}>{todo.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Recent Activity */}
+              <div style={styles.block}>
+                <div style={styles.blockHeader}>
+                  <span style={styles.toggle}>▶</span>
+                  <h2 style={styles.blockTitle}>🕐 最近动态</h2>
+                </div>
+                <div style={styles.activityList}>
+                  {activities.map((activity, i) => (
+                    <div key={i} style={styles.activityItem}>
+                      <span style={styles.activityEmoji}>{activity.emoji}</span>
+                      <div style={styles.activityContent}>
+                        <span style={styles.activityTitle}>{activity.title}</span>
+                        <span style={styles.activityTag}>{activity.tag}</span>
+                      </div>
+                      <span style={styles.activityTime}>{activity.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quote Block */}
+              <div style={styles.quote}>
+                <div style={styles.quoteLine}></div>
+                <p style={styles.quoteText}>"用温柔的方式，记录每一份成长。" 🌱</p>
+              </div>
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    const styles = {
+      container: {
+        display: 'flex',
+        minHeight: '100vh'
+      },
+      sidebar: {
+        width: '240px',
+        background: '#F7F6F3',
+        padding: '16px',
+        borderRight: '1px solid #E9E9E7',
+        flexShrink: 0
+      },
+      sidebarHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        padding: '8px 8px 16px',
+        borderBottom: '1px solid #E9E9E7',
+        marginBottom: '8px'
+      },
+      workspaceIcon: {
+        width: '20px',
+        height: '20px',
+        fontSize: '18px'
+      },
+      workspaceName: {
+        fontSize: '14px',
+        fontWeight: 600,
+        color: '#37352F'
+      },
+      nav: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2px'
+      },
+      navItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        padding: '6px 8px',
+        borderRadius: '4px',
+        fontSize: '14px',
+        color: '#37352F',
+        cursor: 'pointer',
+        transition: 'background 0.15s ease'
+      },
+      navIcon: {
+        fontSize: '16px'
+      },
+      main: {
+        flex: 1,
+        padding: '40px 80px',
+        maxWidth: '900px'
+      },
+      breadcrumb: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        marginBottom: '8px',
+        fontSize: '14px'
+      },
+      breadcrumbItem: {
+        color: '#6B6B6B',
+        cursor: 'pointer'
+      },
+      breadcrumbSep: {
+        color: '#9B9B9B'
+      },
+      breadcrumbCurrent: {
+        color: '#37352F',
+        fontWeight: 500
+      },
+      pageHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: '24px'
+      },
+      pageTitle: {
+        fontSize: '40px',
+        fontWeight: 700,
+        color: '#37352F',
+        marginBottom: '8px',
+        letterSpacing: '-0.5px'
+      },
+      pageDate: {
+        fontSize: '14px',
+        color: '#6B6B6B'
+      },
+      headerActions: {
+        display: 'flex',
+        gap: '8px'
+      },
+      actionBtn: {
+        padding: '6px 12px',
+        border: '1px solid #E9E9E7',
+        borderRadius: '4px',
+        background: 'transparent',
+        fontSize: '14px',
+        color: '#37352F',
+        cursor: 'pointer'
+      },
+      primaryBtn: {
+        padding: '6px 12px',
+        border: 'none',
+        borderRadius: '4px',
+        background: '#FD7E14',
+        fontSize: '14px',
+        color: '#FFFFFF',
+        fontWeight: 500,
+        cursor: 'pointer'
+      },
+      content: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px'
+      },
+      callout: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '12px',
+        padding: '16px 20px',
+        background: '#FEF3C7',
+        borderRadius: '4px',
+        borderLeft: '4px solid #F59E0B'
+      },
+      calloutIcon: {
+        fontSize: '20px'
+      },
+      calloutText: {
+        fontSize: '15px',
+        color: '#37352F',
+        lineHeight: 1.6
+      },
+      block: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px'
+      },
+      blockHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px'
+      },
+      toggle: {
+        fontSize: '10px',
+        color: '#9B9B9B',
+        cursor: 'pointer'
+      },
+      blockTitle: {
+        fontSize: '20px',
+        fontWeight: 600,
+        color: '#37352F'
+      },
+      statsGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '8px'
+      },
+      statBlock: {
+        padding: '16px',
+        borderRadius: '4px',
+        transition: 'all 0.2s ease',
+        cursor: 'pointer'
+      },
+      statEmoji: {
+        fontSize: '24px',
+        marginBottom: '8px'
+      },
+      statValue: {
+        fontSize: '28px',
+        fontWeight: 700,
+        color: '#37352F',
+        marginBottom: '4px'
+      },
+      statLabel: {
+        fontSize: '13px',
+        color: '#6B6B6B'
+      },
+      twoColumn: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '24px'
+      },
+      column: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px'
+      },
+      linksGrid: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '8px'
+      },
+      linkBlock: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '20px 16px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        transition: 'transform 0.15s ease'
+      },
+      linkEmoji: {
+        fontSize: '28px'
+      },
+      linkLabel: {
+        fontSize: '13px',
+        fontWeight: 500,
+        color: '#37352F'
+      },
+      todoList: {
+        background: '#F7F6F3',
+        borderRadius: '4px',
+        padding: '12px'
+      },
+      todoItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        padding: '8px 0',
+        borderBottom: '1px solid #E9E9E7'
+      },
+      checkbox: {
+        width: '16px',
+        height: '16px',
+        border: '1.5px solid #D1D1D1',
+        borderRadius: '4px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        flexShrink: 0
+      },
+      checkmark: {
+        color: '#FFFFFF',
+        fontSize: '11px',
+        fontWeight: 700
+      },
+      todoText: {
+        fontSize: '14px'
+      },
+      activityList: {
+        display: 'flex',
+        flexDirection: 'column'
+      },
+      activityItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '10px 0',
+        borderBottom: '1px solid #F1F1EF'
+      },
+      activityEmoji: {
+        fontSize: '18px'
+      },
+      activityContent: {
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px'
+      },
+      activityTitle: {
+        fontSize: '14px',
+        color: '#37352F'
+      },
+      activityTag: {
+        fontSize: '11px',
+        padding: '2px 8px',
+        background: '#F1F1EF',
+        borderRadius: '12px',
+        color: '#6B6B6B'
+      },
+      activityTime: {
+        fontSize: '13px',
+        color: '#9B9B9B'
+      },
+      quote: {
+        display: 'flex',
+        gap: '12px',
+        padding: '16px 0',
+        marginTop: '16px'
+      },
+      quoteLine: {
+        width: '4px',
+        background: '#37352F',
+        borderRadius: '2px'
+      },
+      quoteText: {
+        fontSize: '16px',
+        fontStyle: 'italic',
+        color: '#6B6B6B',
+        lineHeight: 1.6
+      }
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Dashboard />);
+  </script>
+</body>
+</html>
